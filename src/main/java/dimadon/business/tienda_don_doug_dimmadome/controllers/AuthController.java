@@ -80,7 +80,7 @@ public class AuthController {
                     .maxAge(24 * 60 * 60)
                     .build();
 
-            response.addHeader(HttpHeaders.SET_COOKIE, tokenCookie.toString());
+            response.addHeader(HttpHeaders.COOKIE, tokenCookie.toString());
             // response.addHeader("Access-Control-Allow-Credentials", "true");
 
             res.put("usuario", usuario);

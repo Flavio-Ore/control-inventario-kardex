@@ -83,6 +83,8 @@ public class AuthController {
             response.addHeader(HttpHeaders.SET_COOKIE, tokenCookie.toString());
             // response.addHeader("Access-Control-Allow-Credentials", "true");
 
+            res.put("usuario", usuario);
+            res.put("token", token);
             // Responder con un mensaje de éxito, sin mostrar los tokens en el cuerpo
             return ResponseEntity.status(HttpStatus.OK).body(res);
         } catch (BadCredentialsException e) {

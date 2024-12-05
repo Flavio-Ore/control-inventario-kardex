@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dimadon.business.tienda_don_doug_dimmadome.entities.Producto;
-import dimadon.business.tienda_don_doug_dimmadome.entities.Usuario;
 import dimadon.business.tienda_don_doug_dimmadome.services.ServiceProducto;
 
 @RestController

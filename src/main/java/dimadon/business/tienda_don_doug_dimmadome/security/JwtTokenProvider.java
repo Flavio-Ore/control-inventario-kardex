@@ -19,7 +19,7 @@ public class JwtTokenProvider {
 
     // Genera una clave secreta de 512 bits para el algoritmo HS512
     private final SecretKey jwtSecret = Keys.secretKeyFor(SignatureAlgorithm.HS512);
-    private final long jwtExpirationInMs = 3600 * 1000; // 1 hora en milisegundos
+    private final long jwtExpirationInMs = 1000 * 60 * 10; // 1 hora en milisegundos
 
     public String generateToken(String email, int roleId) {
         return Jwts.builder()

@@ -82,7 +82,7 @@ public class AuthController {
                     .path("/")
                     .maxAge(Duration.ofMinutes(10))
                     .build();
-            response.addHeader(HttpHeaders.COOKIE, tokenCookie.toString());
+            response.addHeader(HttpHeaders.SET_COOKIE, tokenCookie.toString());
 
             res.put("usuario", usuario);
             res.put("token", token);

@@ -1,21 +1,25 @@
 package dimadon.business.tienda_don_doug_dimmadome.controllers;
 
-import dimadon.business.tienda_don_doug_dimmadome.security.JwtTokenProvider;
-import dimadon.business.tienda_don_doug_dimmadome.entities.Usuario;
-import dimadon.business.tienda_don_doug_dimmadome.services.ServiceUsuario;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.Map;
+import dimadon.business.tienda_don_doug_dimmadome.entities.Usuario;
+import dimadon.business.tienda_don_doug_dimmadome.security.JwtTokenProvider;
+import dimadon.business.tienda_don_doug_dimmadome.services.ServiceUsuario;
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/auth")
@@ -58,12 +62,24 @@ public class AuthController {
 
             String token = jwtTokenProvider.generateToken(email, usuario.getTipoUsuario().getIdTipoUsuario());
             // Configurar la cookie para el access token
-            Cookie tokenCookie = new Cookie("token", token);
-            tokenCookie.setHttpOnly(false);
-            tokenCookie.setSecure(true); // Establecer en true si usas HTTPS
-            tokenCookie.setPath("/");
-            tokenCookie.setMaxAge(60 * 10); // 5 minutos
-            response.addCookie(tokenCookie);
+            // Cookie tokenCookie = new Cookie("token", token);
+            // tokenCookie.setHttpOnly(false);
+            // tokenCookie.setSecure(true); // Establecer en true si usas HTTPS
+            // tokenCookie.setPath("/");
+            // tokenCookie.setMaxAge(60 * 10); // 5 minutos
+            // response.addHeader("Access-Control-Allow-Credentials", "true");
+            // Building cookies
+            ResponseCookie tokenCookie = ResponseCookie
+                    .from("token")
+                    .value(token)
+                    .httpOnly(false)
+                    .secure(true)
+                    .sameSite("None")
+                    .path("/")
+                    .maxAge(60 * 10).build();
+
+            // Response to the client
+            response.setHeader(HttpHeaders.SET_COOKIE, tokenCookie.toString());
             res.put("token", token);
             res.put("usuario", usuario);
 

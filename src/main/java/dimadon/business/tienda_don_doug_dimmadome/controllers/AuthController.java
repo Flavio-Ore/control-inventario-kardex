@@ -60,7 +60,8 @@ public class AuthController {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
             }
 
-            String token = jwtTokenProvider.generateToken(email, usuario.getTipoUsuario().getIdTipoUsuario());
+            // String token = jwtTokenProvider.generateToken(email,
+            // usuario.getTipoUsuario().getIdTipoUsuario());
             // Configurar la cookie para el access token
             // Cookie tokenCookie = new Cookie("token", token);
             // tokenCookie.setHttpOnly(false);
@@ -69,21 +70,18 @@ public class AuthController {
             // tokenCookie.setMaxAge(60 * 10); // 5 minutos
             // response.addHeader("Access-Control-Allow-Credentials", "true");
             // Building cookies
-            ResponseCookie tokenCookie = ResponseCookie
-                    .from("token")
-                    .value(token)
+            String token = jwtTokenProvider.generateToken(email, usuario.getTipoUsuario().getIdTipoUsuario());
+
+            ResponseCookie tokenCookie = ResponseCookie.from("token", token)
                     .httpOnly(false)
                     .secure(true)
                     .sameSite("None")
                     .path("/")
-                    .maxAge(60 * 10).build();
+                    .maxAge(24 * 60 * 60)
+                    .build();
 
-            // Response to the client
-            response.setHeader(HttpHeaders.SET_COOKIE, tokenCookie.toString());
-            res.put("token", token);
-            res.put("usuario", usuario);
-
-            System.out.println(res);
+            response.addHeader(HttpHeaders.SET_COOKIE, tokenCookie.toString());
+            response.addHeader("Access-Control-Allow-Credentials", "true");
 
             // Responder con un mensaje de éxito, sin mostrar los tokens en el cuerpo
             return ResponseEntity.status(HttpStatus.OK).body(res);
